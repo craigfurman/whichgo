@@ -1,5 +1,5 @@
 # whichgo
-Another version manager for Go.
+Another version manager for Go. Inspired by [GVM](https://github.com/moovweb/gvm).
 
 ## Installation
 1. clone this repository somewhere
