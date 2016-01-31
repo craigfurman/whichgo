@@ -21,6 +21,7 @@ gogo() {
       ;;
 
     use)
+      gogo_use "$1"
       ;;
 
     *)
@@ -61,4 +62,17 @@ gogo_install() {
   popd
   popd
   popd
+}
+
+gogo_use() {
+  if [ -z "$1" ]; then
+    echo "usage: gogo use go1.4.3" >&2
+    return 1
+  fi
+
+  local version="$1"
+  shift
+
+  export GOROOT=$GOGO_HOME/$version
+  export PATH=$GOROOT/bin:$(echo $PATH | tr ':' '\n' | grep -v $GOGO_HOME | tr '\n' ':' | sed 's/:*$//')
 }
