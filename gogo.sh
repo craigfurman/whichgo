@@ -1,5 +1,6 @@
 GOGO_HOME=~/.gogo
 mkdir -p $GOGO_HOME
+GOOGLE_GO_REPO=https://go.googlesource.com/go
 
 gogo() {
   if [ -z "$1" ]; then
@@ -16,7 +17,7 @@ gogo() {
       ;;
 
     install)
-      gogo_install
+      gogo_install "$1"
       ;;
 
     use)
@@ -35,7 +36,7 @@ gogo_list() {
       return 1
     fi
 
-    git ls-remote -t https://go.googlesource.com/go | grep refs/tags/go | awk -F/ '{ print $NF }'
+    git ls-remote -t $GOOGLE_GO_REPO | grep refs/tags/go | awk -F/ '{ print $NF }'
     return 0
   fi
 
@@ -43,5 +44,21 @@ gogo_list() {
 }
 
 gogo_install() {
-  return 1
+  if [ -z "$1" ]; then
+    echo "usage: gogo install go1.4.3" >&2
+    return 1
+  fi
+
+  local version="$1"
+  shift
+
+  pushd $GOGO_HOME
+  git clone $GOOGLE_GO_REPO $version
+  pushd $GOGO_HOME/$version
+  git checkout $version
+  pushd src
+  ./make.bash
+  popd
+  popd
+  popd
 }
