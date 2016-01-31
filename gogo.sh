@@ -4,7 +4,7 @@ GOOGLE_GO_REPO=https://go.googlesource.com/go
 
 gogo() {
   if [ -z "$1" ]; then
-    echo "TODO usage message"
+    echo "usage: gogo list / install / use"
     return 0
   fi
 
