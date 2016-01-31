@@ -22,6 +22,7 @@ Another version manager for Go. Inspired by [GVM](https://github.com/moovweb/gvm
 
 ### A note about Go 1.5+
 The Go compiler was rewritten in Go for 1.5. To compile Go 1.5+, you must have a previous version of Go already installed, and set `$GOROOT_BOOTSTRAP` to point to this installation. E.g:
+
 1. `whichgo install go1.4.3`
 1. `whichgo use go1.4.3`
 1. `GOROOT_BOOTSTRAP=$GOROOT whichgo install go1.5.3`
