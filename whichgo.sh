@@ -1,10 +1,10 @@
-GOGO_HOME=~/.gogo
-mkdir -p $GOGO_HOME
+WHICHGO_HOME=~/.whichgo
+mkdir -p $WHICHGO_HOME
 GOOGLE_GO_REPO=https://go.googlesource.com/go
 
-gogo() {
+whichgo() {
   if [ -z "$1" ]; then
-    echo "usage: gogo list / install / use"
+    echo "usage: whichgo list / install / use"
     return 0
   fi
 
@@ -13,15 +13,15 @@ gogo() {
 
   case $subcommand in
     list)
-      gogo_list "$1"
+      whichgo_list "$1"
       ;;
 
     install)
-      gogo_install "$1"
+      whichgo_install "$1"
       ;;
 
     use)
-      gogo_use "$1"
+      whichgo_use "$1"
       ;;
 
     *)
@@ -30,10 +30,10 @@ gogo() {
   esac
 }
 
-gogo_list() {
+whichgo_list() {
   if [ -n "$1" ]; then
     if [ "$1" != "--all" ]; then
-      echo "usage: gogo list [--all]" >&2
+      echo "usage: whichgo list [--all]" >&2
       return 1
     fi
 
@@ -41,21 +41,21 @@ gogo_list() {
     return 0
   fi
 
-  ls $GOGO_HOME
+  ls $WHICHGO_HOME
 }
 
-gogo_install() {
+whichgo_install() {
   if [ -z "$1" ]; then
-    echo "usage: gogo install go1.4.3" >&2
+    echo "usage: whichgo install go1.4.3" >&2
     return 1
   fi
 
   local version="$1"
   shift
 
-  pushd $GOGO_HOME
+  pushd $WHICHGO_HOME
   git clone $GOOGLE_GO_REPO $version
-  pushd $GOGO_HOME/$version
+  pushd $WHICHGO_HOME/$version
   git checkout $version
   pushd src
   ./make.bash
@@ -64,15 +64,15 @@ gogo_install() {
   popd
 }
 
-gogo_use() {
+whichgo_use() {
   if [ -z "$1" ]; then
-    echo "usage: gogo use go1.4.3" >&2
+    echo "usage: whichgo use go1.4.3" >&2
     return 1
   fi
 
   local version="$1"
   shift
 
-  export GOROOT=$GOGO_HOME/$version
-  export PATH=$GOROOT/bin:$(echo $PATH | tr ':' '\n' | grep -v $GOGO_HOME | tr '\n' ':' | sed 's/:*$//')
+  export GOROOT=$WHICHGO_HOME/$version
+  export PATH=$GOROOT/bin:$(echo $PATH | tr ':' '\n' | grep -v $WHICHGO_HOME | tr '\n' ':' | sed 's/:*$//')
 }
