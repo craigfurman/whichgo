@@ -12,7 +12,7 @@ gogo() {
 
   case $subcommand in
     list)
-      gogo_list
+      gogo_list "$1"
       ;;
 
     install)
@@ -29,6 +29,16 @@ gogo() {
 }
 
 gogo_list() {
+  if [ -n "$1" ]; then
+    if [ "$1" != "--all" ]; then
+      echo "usage: gogo list [--all]" >&2
+      return 1
+    fi
+
+    git ls-remote -t https://go.googlesource.com/go | grep refs/tags/go | awk -F/ '{ print $NF }'
+    return 0
+  fi
+
   ls $GOGO_HOME
 }
 
