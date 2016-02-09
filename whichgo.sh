@@ -78,6 +78,11 @@ whichgo_use() {
   local version="$1"
   shift
 
+  if [ ! -f $WHICHGO_HOME/$version/bin/go ]; then
+    echo "$version not found: run whichgo install $version first" >&2
+    return 1
+  fi
+
   export GOROOT=$WHICHGO_HOME/$version
   export PATH=$GOROOT/bin:$(echo $PATH | tr ':' '\n' | grep -v $WHICHGO_HOME | tr '\n' ':' | sed 's/:*$//')
 }
