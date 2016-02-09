@@ -54,11 +54,16 @@ whichgo_install() {
   shift
 
   pushd $WHICHGO_HOME
-  git clone $GOOGLE_GO_REPO $version
+  if [ ! -d $version ]; then
+    git clone $GOOGLE_GO_REPO $version
+  fi
+
   pushd $WHICHGO_HOME/$version
   git checkout $version
+
   pushd src
   ./make.bash
+
   popd
   popd
   popd
