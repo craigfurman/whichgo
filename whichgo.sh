@@ -62,7 +62,29 @@ whichgo_install() {
   git checkout $version
 
   pushd src
-  ./make.bash
+  echo "Compiling Go..."
+
+  output=$(./make.bash 2>&1)
+  local rc=$?
+  if [ "$rc" == "0" ]; then
+    return 0
+  fi
+
+  if [[ "$output" == *"Set \$GOROOT_BOOTSTRAP to a working Go tree >= Go 1.4"* ]]; then
+    local bootstrap_version="go1.4.3"
+    if [ ! -f $WHICHGO_HOME/$bootstrap_version/bin/go ]; then
+      echo "Need an existing Go version to compile Go 1.5+... Installing $bootstrap_version"
+      whichgo_install $bootstrap_version
+    else
+      echo "Using $bootstrap_version to compile ${version}..."
+    fi
+
+    GOROOT_BOOTSTRAP=$WHICHGO_HOME/$bootstrap_version ./make.bash
+    return 0
+  fi
+
+  echo "$output"
+  return 1
 
   popd
   popd
